@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Fresh Mart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>                
+        <link rel="icon" href="/static/images/store.png">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        
+
+</head>
+<body>
+   <nav class="navbar navbar-expand-lg  bg-dark">
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+
+        <a class="navbar-brand" href="#">
+             <img src=/static/images/store.png width="50" height="40" alt="">
+         </a>
+ 
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a style="color: white;" class="nav-link" href=/>Home <span class="sr-only">(current)</span></a>
+            </li>
+              
+        </ul>
+        <p style="color: orange;font-size: 40px;">Fresh Mart</p>
+        <p style="color:greenyellow;font-size:30px;">&nbsp &nbsp Go Organic, Be Healthy!!!&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</p>
+       </div>
+	   <ul class="navbar-nav mt-2 mt-lg-0">
+             <li class="nav-item" >
+                <a style="color: white; font-size: medium;" class="nav-link" href=/login>Sign in</a>
+           </li>
+           <li class="nav-item">
+               <a style="color: white; font-size: medium;" class="nav-link" href=/register>Register</a>
+           </li>
+         </ul>
+        
+        
+</div>
+   </nav>
+
+   	
+<style>
+  body {
+    background-image:url('static/images/store.png');
+    background-color: rgba(243, 188, 107, 0.841);
+    background-repeat: no-repeat;
+  background-attachment: fixed;
+    background-color: blanchedalmond;
+    background-position: bottom right;
+    background-size: 800px 550px;
+    
+  }
+  </style>
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&nbsp; &nbsp; &times;    
+         
+      </button>
+     {{ message }}
+    </div>
+  {% endfor %}
+
+ <div class="container" style="padding-top:20px;">
+<div class="row">
+ <div class="col-md-9 personal-info">
+  <form method='POST' class="form-horizontal" role="form">
+        <div class="form-group">
+        <label class="col-lg-3 control-label">Email:</label>
+             <div class="col-lg-8">
+       <input class="form-control" type="text" placeholder="email" name="email">
+            </div><!-- closing col-lg-8-->
+        </div><!-- closing form-group-->
+  <form class="form-horizontal" role="form">
+        <div class="form-group">
+        <label class="col-lg-3 control-label">Password:</label>
+             <div class="col-lg-8">
+       <input class="form-control" type="password" placeholder="Password" name="password">
+            </div><!-- closing col-lg-8-->
+        </div><!-- closing form-group-->
+  <button type="submit" class="btn btn-primary">Sign In</button>
+  
+</form>
+</div>
+</div>
+   </div>                     
+    
+
+
+</html>

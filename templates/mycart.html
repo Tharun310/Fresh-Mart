@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fresh Mart</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>                
+        <link rel="icon" href="/static/images/store.png">
+   
+    <style>
+body {
+            position: relative;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+
+        }
+
+      
+
+        body:before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/static/Images/bg4.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6;
+            z-index: -1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            margin: 0 auto;
+            width: 70%;
+            border-collapse: collapse;
+            background-color: linen;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+
+        .total-price {
+          width: 150px;
+            height: 50px;
+            background-color: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-weight: bold;
+
+        }
+        
+    </style>
+</head>
+<body>
+  <div class="sticky header">
+    <nav class="navbar navbar-expand-lg  bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+ 
+         <a class="navbar-brand" href="#">
+              <img src=/static/images/store.png width="50" height="40" alt="">
+          </a>
+  
+         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+             <li class="nav-item active">
+                 <a style="color: white; font-size: medium;" class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
+             </li>
+         </ul>
+         <p style="color: orange;font-size: 40px;">Fresh Mart</p>
+         <p style="color:greenyellow;font-size:30px;">&nbsp &nbsp Go Organic, Be Healthy!!!&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</p>
+        </div>
+     </div>
+         
+         
+ </div>
+    </nav>
+ 
+    <h1>My Cart</h1>
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+        {% for item in cartItems %}
+        <tr>
+            <td><img src="/static/Images/{{ item.name }}.png"  width="50" height="40">{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+<br>
+    <div class="total-price">Total Price: {{ totalPrice }}</div>
+    <br>
+    <button id="placeOrderBtn">Place Order</button>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <h2>Order Summary</h2>
+            <p>Total Price: {{ totalPrice }}</p>
+          <form id="cartForm" action="{{url_for('pay')}}" method ="POST">
+            {% set grandtotal=totalPrice.replace('.','') %}
+            <input type="hidden" name="amount" value="{{grandtotal}}">
+            <input type="hidden" name="cartlist" value="{{ cartItems }}">
+            
+
+            <script
+              src="https://checkout.stripe.com/checkout.js"
+              class="stripe-button"
+              data-key="pk_test_51NDkvVFxh55otoCcyBoCb71RT1JRWeg66zXK1YiNLklNlkQvxkhrdT5Cbutmr1qiCHNqHLTi2fWJXsWgOTdcIMHZ00yZ4K5ip6"
+              data-name="Fresh Mart"
+              data-description="Go Organic Be Healthy"
+              data-amount="{{grandtotal}}"
+              data-currency="inr"
+              >
+            </script>
+        </div>
+    </div>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      var modal = document.getElementById('myModal');
+      var placeOrderBtn = document.getElementById('placeOrderBtn');
+      var placeOrderBtn = document.getElementById('placeOrderBtn');
+      var proceedToPayBtn = document.getElementById('proceedToPayBtn');
+
+      // Open the modal when place order button is clicked
+      placeOrderBtn.addEventListener('click', function() {
+          modal.style.display = 'block';
+      });
+      
+
+
+      // Close the modal if user clicks outside of it
+      window.addEventListener('click', function(event) {
+          if (event.target == modal) {
+              modal.style.display = 'none';
+          }
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Fresh Mart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>                
+        <link rel="icon" href="/static/images/store.png">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <style>
+            body{
+                background-color:lightgoldenrodyellow;
+            }
+
+            div.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+    .username {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      font-weight: bold;
+      background-color: yellow;
+      padding: 5px 10px;
+      width: 160px;
+      height: 55px;
+      text-align: center;
+      border-radius: 5px;
+    }
+            .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      top: 50px;
+      right: 10px;
+    }
+    
+    .message-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            height: 200px;
+            width: 350px;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: lightgray;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-box h3 {
+            margin-top: 0;
+        }
+
+        .quantity-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .quantity-control button {
+            padding: 5px 5px;
+            margin: 0 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .quantity-control span {
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .add-to-cart-button {
+            text-align: center;
+        }
+    
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .product-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .product-cell {
+            width: 20%;
+            height: 23%;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            transition: box-shadow 0.3s;
+        }
+        
+        .product-cell:hover {
+            transform: translateZ(100px);
+        }
+        .product-image {
+            max-width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+
+        .product-name {
+            font-weight: bold;
+        }
+
+        .product-price {
+            margin-bottom: 5px;
+        }
+        .add-to-cart-button {
+            text-align: center;
+        }
+        .product-cell:hover {
+  box-shadow: 0 0 10px orange;
+}
+          </style>
+
+</head>
+<body>
+
+<div class="sticky">
+   <nav class="navbar navbar-expand-lg bg-dark ">
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+
+        <a class="navbar-brand" href="#">
+            <img src=/static/images/store.png width="50" height="40" alt="">
+         </a>
+ 
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a style="color: white; font-size: medium;" class="nav-link" href=/>Home &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <p style="color: orange;font-size: 40px;"> Fresh</p>
+        <marquee style="color:greenyellow;font-size:30px;">Go Organic, Be Healthy!!!</marquee>
+       </div>
+      
+    <p style="color: orange;font-size: 40px;">Mart &nbsp &nbsp</p>
+
+
+
+	   <ul class="navbar-nav mt-2 mt-lg-0">
+
+             <li class="nav-item" >
+                <a style="color: white; font-size: medium;" class="nav-link" href=\login>Sign in</a>
+           </li>
+
+           <li class="nav-item">
+               <a style="color: white; font-size: medium;"class="nav-link" href=\register>Register</a>
+           </li>
+           <li>
+            {% if username %}
+            <div class="dropdown">
+              <button class="username">
+               Welcome, {{ username }}
+              </button>
+              <div class="dropdown-content">
+                <a href="{{ url_for('mycart') }}">Cart</a>
+                <a href="{{ url_for('profile') }}">My Profile</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+              </div>
+            </div>
+          {% endif %}
+            </li>
+         </ul>
+        
+
+        
+</div>
+   </nav>
+</div style="text-align:center">
+   {% for message in get_flashed_messages() %}
+   <div class="alert alert-success">
+     <button type="button" class="close" data-dismiss="alert">&nbsp; &nbsp; &times;    
+        
+     </button>
+    {{ message }}
+   </div>
+ {% endfor %}
+
+<br>
+
+{% for product in products %}
+    {% if loop.index0 % 4 == 0 %}
+    <div class="product-row">
+    {% endif %}
+        <div class="product-cell">
+            <img class="product-image" src="/static/images/{{product[1]}}.png" alt="Product Image">
+            <div class="product-name">{{ product[1] }}</div>
+            <div class="product-price">&#8377;{{ product[2] }} per {{product[3]}}</div>
+            <div class="add-to-cart-button">
+                <button onclick="showMessageBox('{{ product[1] }}', '{{ product[2] }}')">ADD</button>
+            </div>
+        </div>
+    {% if loop.index % 4 == 0 or loop.last %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+
+
+<div class="message-box" id="messageBox">
+    <h3>Add to Cart</h3>
+    <p id="productInfo"></p>
+    <div class="quantity-control">
+        <button onclick="decreaseQuantity()">-</button>
+        <span id="quantity">1</span>
+        <button onclick="increaseQuantity()">+</button>
+    </div>
+    <button onclick="addToCart()">Add</button>
+</div>
+
+
+<script>
+    var messageBox = document.getElementById('messageBox');
+    var productInfo = document.getElementById('productInfo');
+    var quantity = document.getElementById('quantity');
+    var currentQuantity = 1;
+    var cartItems = [];
+
+    function showMessageBox(productName, productPrice) {
+        productInfo.textContent = 'Product: ' + productName + ' | Price: ' + productPrice;
+        quantity.textContent = currentQuantity;
+        messageBox.style.display = 'block';
+    }
+
+    function increaseQuantity() {
+        currentQuantity++;
+        quantity.textContent = currentQuantity;
+    }
+
+    function decreaseQuantity() {
+        if (currentQuantity > 1) {
+            currentQuantity--;
+            quantity.textContent = currentQuantity;
+        }
+    }
+
+    function addToCart() {
+            var selectedQuantity = currentQuantity;
+            var selectedProduct = {
+                name: productInfo.textContent.split(' | ')[0].split(': ')[1],
+                price: parseFloat(productInfo.textContent.split(' | ')[1].split(': ')[1]),
+                quantity: selectedQuantity
+            };
+            cartItems.push(selectedProduct);
+
+            messageBox.style.display = 'none';
+            currentQuantity = 1;
+            quantity.textContent = currentQuantity;
+            var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/mycart", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(JSON.stringify({ cart: cartItems }));
+        }
+
+    
+
+</script>
+
+</html>
