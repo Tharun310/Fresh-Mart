@@ -21,7 +21,83 @@
         <link rel="icon" href="/static/images/store.png">
 </head>
 <style>
+.modals {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
 
+.modals-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px;
+  max-width: 80%;
+  text-align: center;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  
+}
+
+/* Save button */
+#save-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  z-index: 9999;
+}
+
+.message p {
+  margin: 0 0 10px;
+}
+
+.message button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#save-button:hover {
+  background-color: #45a049;
+}
 
     </style>
 <body class="tooltips">
@@ -52,34 +128,20 @@
         </nav>
      
 <div class="container">
-
-    <div class="header content rows-content-header">
-        <button class="button-menu-mobile show-sidebar">
-            <i class="fa fa-bars"></i>
-        </button>
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container">
-
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav visible-lg visible-md limit-chars">
-                        <ul class="breadcrumb">
-                            <a href="\admin">
-                                <i class="zmdi zmdi-view-dashboard zmdi-hc-fw" title="Orders"></i>
-                            </a>
-                            <a href="\manageproduct">
-                                <i class="zmdi zmdi-assignment zmdi-hc-fw" title="Products"></i>
-                            </a>
-                        </ul>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="right content-page">
         <div class="body content rows scroll-y">
             <div class="box-info full" id="taskFormContainer">
                 <h2>Manage Products</h2>
+                <ul class="nav navbar-nav visible-lg visible-md limit-chars">
+                    <ul class="breadcrumb">
+                        <a href="\admin">
+                            <i class="zmdi zmdi-view-dashboard zmdi-hc-fw" title="Orders"></i>
+                        </a>
+                        <a href="\manageproduct">
+                            <i class="zmdi zmdi-assignment zmdi-hc-fw" title="Products"></i>
+                        </a>
+                    </ul>
+                </ul>
                 <div class="panel-body pt-0">
                     <div class="row mb-4">
                         <div class="col-sm-12">
@@ -103,7 +165,16 @@
             </div>
         </div>
     </div>
-
+    <div id="edit-modal" class="modals">
+        <div class="modals-content">
+            <span class="close">&times;</span>
+            <h2>Edit Product Details</h2>
+            <div id="edit-details"></div>
+            <button id="save-button">Save</button>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div class="modal fade-scale" id="productModal" role="dialog" data-backdrop="static">
         <div class="modal-dialog ">
             <div class="modal-content">

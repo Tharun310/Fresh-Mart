@@ -13,10 +13,10 @@ import ast
 publishable_key="pk_test_51NDkvVFxh55otoCcyBoCb71RT1JRWeg66zXK1YiNLklNlkQvxkhrdT5Cbutmr1qiCHNqHLTi2fWJXsWgOTdcIMHZ00yZ4K5ip6"
 stripe.api_key = 'sk_test_51NDkvVFxh55otoCcrrUkpUQPdzZVhMIYSKp1TTxZ2xGbDZTzo3HuG2eTvWWxOZQe1XPLhWJo4bAv4OM5BpMDYD5S00sYrYCrwW'
 
-user_id = None
+user_id = 2
 cart_items=[]
-total_price = 0.0
-logged_in = False
+total_price = "0.0"
+logged_in = 0
 
 app = Flask(__name__)
 app.secret_key = 'Th@run666'
@@ -118,7 +118,7 @@ def pay():
 @app.route('/index')
 def index():
     user = user_details_id(user_id)
-    return redirect(url_for('home',username=user[1]))
+    return redirect(url_for('home',username=user[1],logged_in = logged_in))
 
 @app.route('/mycart',methods=['GET', 'POST'])
 def mycart():
@@ -149,7 +149,8 @@ def home():
     cursor.execute("select products.product_id, products.product, products.price_per_unit, units.unit_name from products inner join units on products.unit_id=units.unit_id")
     products = cursor.fetchall()
     cursor.close()
-    return render_template('index.html', username=username,products=products)
+    print(logged_in)
+    return render_template('index.html', username=username,products=products, logged_in = logged_in)
 
 @app.route('/admin')
 def admin():
@@ -182,8 +183,8 @@ def login():
             global user_id
             user_id = user[0]
             global logged_in
-            logged_in = True
-            return redirect(url_for('home',username=user[1]))
+            logged_in = 1
+            return redirect(url_for('home',username=user[1],logged_in = logged_in))
         else:
             # Wrong email or password
             flash('Wrong email or password!', 'error')
@@ -195,16 +196,15 @@ def login():
 def profile():
     user = user_details_id(user_id)
     orders = get_order_details(user[0])
-    print(orders)
     return render_template('profile.html', firstname=user[1], lastname=user[2],email=user[3],address=user[5], city=user[6], state=user[7],zipcode=user[8], country=user[9], phone=user[10], orders = orders)
 
 
 @app.route('/logout')
 def logout():
     global logged_in
-    logged_in = False
+    logged_in = 0
     flash('Logged out successfully!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('home', logged_in = logged_in))
 
 
 @app.route('/insertCustomer', methods=['POST'])
@@ -279,6 +279,20 @@ def delete_product():
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
+
+@app.route('/update_product', methods=['POST'])
+def update_product():
+    data = request.get_json()
+    # Handle the updated product details
+    name = data['name']
+    price = float(data['price'])
+    cursor = connection.cursor()
+    cursor.execute("UPDATE products SET price_per_unit = %s WHERE product = %s",(price, name,))
+    connection.commit()
+    return jsonify(success=True)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

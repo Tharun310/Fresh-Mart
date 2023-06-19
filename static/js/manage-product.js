@@ -1,21 +1,79 @@
 var productModal = $("#productModal");
-    $(function () {
+$(function () {
+    // JSON data by API call
+    $.get(productListApiUrl, function (response) {
+        if (response) {
+            var table = '';
+            $.each(response, function (index, p) {
+                table += '<tr data-id="' + p.product_id + '" data-name="' + p.product + '" data-unit="' + p.unit_id + '" data-price="' + p.price_per_unit + '">' +
+                    '<td>' + p.product + '</td>' +
+                    '<td>' + p.unit_name + '</td>' +
+                    '<td>' + p.price_per_unit + '</td>' +
+                    '<td><span class="btn btn-xs btn-danger edit-product">Edit</span></td></tr>';
+            });
+            $("table").find('tbody').empty().html(table);
 
-        //JSON data by API call
-        $.get(productListApiUrl, function (response) {
-            if(response) {
-                var table = '';
-                $.each(response, function(index, p) {
-                    table += '<tr data-id="'+ p.product_id +'" data-name="'+ p.product +'" data-unit="'+ p.unit_id +'" data-price="'+ p.price_per_unit +'">' +
-                        '<td>'+ p.product +'</td>'+
-                        '<td>'+ p.unit_name +'</td>'+
-                        '<td>'+ p.price_per_unit +'</td>'+
-                        '<td><span class="btn btn-xs btn-danger delete-product">Delete</span></td></tr>';
+            // Event listener for edit button
+            $(".edit-product").click(function () {
+                var row = $(this).closest("tr");
+                var name = row.data("name");
+                var price = row.data("price");
+
+                // Populate the edit details block
+                var editDetails = "<div>Product: <span id='edit-name'>" + name + "</span></div>";
+    
+                editDetails += "<div>Price Per Unit: <input type='text' id='edit-price' value='" + price + "'></div>";
+                $("#edit-details").html(editDetails);
+
+                // Display the modal
+                $("#edit-modal").css("display", "block");
+            });
+
+            // Event listener for close button in the modal
+            $(".close").click(function () {
+                $("#edit-modal").css("display", "none");
+            });
+
+            // Event listener for save button in the modal
+            $("#save-button").click(function () {
+                var name = $("#edit-name").text();
+                var price = $("#edit-price").val();
+
+                // Send the updated details to Flask API
+                $.ajax({
+                    url: "/update_product", // Update the URL to match your Flask route
+                    type: "POST",
+                    data: JSON.stringify({ name: name, price: price }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("Product details updated successfully");
+   
+                        var message = $("<div>").addClass("message");
+                        message.html("<p>Product updated successfully</p><button id='ok-button'>OK</button>");
+                        $("body").append(message);
+
+                        // Event listener for OK button in the message
+                        $("#ok-button").click(function () {
+                            // Close the message
+                            message.remove();
+                            // Refresh the page
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error response
+                        console.error("Error updating product details: " + error);
+                    }
                 });
-                $("table").find('tbody').empty().html(table);
-            }
-        });
+
+                // Close the modal
+                $("#edit-modal").css("display", "none");
+            });
+        }
     });
+});
+
 
     // Save Product
     $("#saveProduct").on("click", function () {

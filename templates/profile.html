@@ -120,7 +120,7 @@
      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
          <li class="nav-item active">
-             <a style="color: white;" class="nav-link" href=/>Home <span class="sr-only">(current)</span></a>
+             <a style="color: white;" class="nav-link"href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
          </li>
            
      </ul>
@@ -159,31 +159,32 @@
   <div class="container">
     <h1>Order History</h1>
 
-    {% for order in orders %}
-    <table class="order-table">
-        <thead>
-            <tr>
-                <th>Products</th>
-                <th>Total Price</th>
-                <th>Ordered On</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            <tr>
-                <td>
-                    {% for product in order[1].split(", ") %}
-                        {{ product }}<br>
-                    {% endfor %}
-                </td>
-                <td>{{ order[2] }}</td>
-                <td class="date-column"><time>{{ order[3].strftime("%B %d, %Y %H:%M:%S") }}</time></td>
-            </tr>
-        </tbody>
-    </table>
+<table class="order-table">
+    <thead>
+        <tr>
+            <th>Products</th>
+            <th>Total Price</th>
+            <th>Ordered On</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>
+                {% for product in order[1].split(", ") %}
+                    {{ product }}<br>
+                {% endfor %}
+            </td>
+            <td>{{ order[2] }}</td>
+            <td class="date-column"><time>{{ order[3].strftime("%B %d, %Y %H:%M:%S") }}</time></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-    <div class="space-between"></div>
-    {% endfor %}
+<div class="space-between"></div>
+
 </div>
 <div class="button-container">
   <button ><a style="color: black;" href="{{ url_for('index') }}">Close</a></button>

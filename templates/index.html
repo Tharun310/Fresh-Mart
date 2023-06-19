@@ -44,6 +44,46 @@
       right: 10px;
     }
     
+    .message-box-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+    }
+    
+    .message-box-login {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      z-index: 10000;
+    }
+    
+    .message-box-login p {
+      margin: 0 0 20px;
+    }
+    
+    .message-box-login button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
     .message-box {
             display: none;
             position: fixed;
@@ -123,7 +163,9 @@
             margin-bottom: 5px;
         }
 
-
+        .product-cell.highlight {
+    background-color: #a4e38a;
+}
         .product-name {
             font-weight: bold;
         }
@@ -136,6 +178,30 @@
         }
         .product-cell:hover {
   box-shadow: 0 0 10px orange;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
           </style>
 
@@ -176,6 +242,8 @@
                <a style="color: white; font-size: medium;"class="nav-link" href=\register>Register</a>
            </li>
            <li>
+              
+
             {% if username %}
             <div class="dropdown">
               <button class="username">
@@ -187,10 +255,12 @@
                 <a href="{{ url_for('logout') }}">Logout</a>
               </div>
             </div>
+
           {% endif %}
             </li>
          </ul>
-        
+         <script>
+        </script>
 
         
 </div>
@@ -206,7 +276,10 @@
  {% endfor %}
 
 <br>
-
+<div class="search-bar">
+  <input type="text" id="search-input" placeholder="Search for a product">
+  <button onclick="searchProduct()">Search</button>
+</div>
 {% for product in products %}
     {% if loop.index0 % 4 == 0 %}
     <div class="product-row">
@@ -216,7 +289,7 @@
             <div class="product-name">{{ product[1] }}</div>
             <div class="product-price">&#8377;{{ product[2] }} per {{product[3]}}</div>
             <div class="add-to-cart-button">
-                <button onclick="showMessageBox('{{ product[1] }}', '{{ product[2] }}')">ADD</button>
+              <button onclick="handleButtonClick('{{ logged_in }}','{{ product[1] }}', '{{ product[2] }}')">ADD</button>
             </div>
         </div>
     {% if loop.index % 4 == 0 or loop.last %}
@@ -224,7 +297,12 @@
     {% endif %}
     {% endfor %}
 
-
+    <div id="messageBoxOverlay" class="message-box-overlay">
+        <div class="message-box-login">
+          <p>Please login to continue shopping</p>
+          <button id="closeMessageBox">OK</button>
+        </div>
+      </div>
 
 <div class="message-box" id="messageBox">
     <h3>Add to Cart</h3>
@@ -239,6 +317,47 @@
 
 
 <script>
+
+function searchProduct() {
+    var input = document.getElementById('search-input').value.toLowerCase();
+    var rows = document.getElementsByClassName('product-row');
+    var found = false;
+
+    for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].getElementsByClassName('product-cell');
+        for (var j = 0; j < cells.length; j++) {
+            var productName = cells[j].getElementsByClassName('product-name')[0].textContent.toLowerCase();
+            if (productName.includes(input)) {
+                rows[i].parentNode.insertBefore(rows[i], rows[0]); // Move the row to the top
+                cells[j].classList.add('highlight');
+                found = true;
+                setTimeout(function() {
+                    cells[j].classList.remove('highlight'); // Remove the highlight after 3 seconds
+                }, 3000);
+                break;
+            } else {
+                cells[j].classList.remove('highlight');
+            }
+        }
+        if (found) {
+            break;
+        }
+    }
+
+    if (!found) {
+        alert('Product not found!');
+    }
+}
+
+
+function handleButtonClick(logged_in, product1, product2) {
+  if (logged_in == 1) {
+    showMessageBox(product1, product2);
+  } else {
+    showLoginMessageBox();
+  }
+}
+
     var messageBox = document.getElementById('messageBox');
     var productInfo = document.getElementById('productInfo');
     var quantity = document.getElementById('quantity');
@@ -250,6 +369,22 @@
         quantity.textContent = currentQuantity;
         messageBox.style.display = 'block';
     }
+
+  function showLoginMessageBox() {
+  var messageBoxDiv = document.createElement('div');
+  messageBoxDiv.setAttribute('class', 'message-box-login');
+  var messageParagraph = document.createElement('p');
+  messageParagraph.innerText = 'Please login to continue shopping!';
+  var okButton = document.createElement('button');
+  okButton.innerText = 'OK';
+  function closeMessageBox() {
+    messageBoxDiv.remove();
+  }
+  okButton.addEventListener('click', closeMessageBox);
+  messageBoxDiv.appendChild(messageParagraph);
+  messageBoxDiv.appendChild(okButton);
+  document.body.appendChild(messageBoxDiv);
+}
 
     function increaseQuantity() {
         currentQuantity++;
